@@ -59,4 +59,4 @@ const sub$ = new Observable<number>((observer) => {
 
 ## Results:
 
-<img width="542" alt="image" src="https://user-images.githubusercontent.com/85326434/232246749-27418d2e-96d8-4306-b3b7-0edc4990f295.png">
+<img width="567" alt="image" src="https://user-images.githubusercontent.com/85326434/232247317-04b69354-5b19-4ad4-aa04-3001f92cfec7.png">
