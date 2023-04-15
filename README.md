@@ -38,7 +38,7 @@ const sub$ = new Observable<number>((observer) => {
     map((val) => val + 100),
     // filter operator used to filter out any odd values
     filter((val) => val % 2 === 0),
-    // the startWith operator is used to set the default value. Note that operator ordering in the pipeline matters to achieve the desired results. For example, if the startWith operator is not placed at the end of this pipeline, it will not work.
+    // the startWith operator is used to set the starting value of the stream. Note that operator ordering in the pipeline matters to achieve the desired results. For example, if the startWith operator is not placed at the end of this pipeline, it will not work.
     startWith(
       "This is the default starting value. The regular data stream will follow now."
     )
