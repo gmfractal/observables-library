@@ -21,12 +21,13 @@ const sub$ = new Observable<number>((observer) => {
     clearInterval(interval);
   };
 })
+  // use the pipe() method of the observable to create a pipeline for manipulating emitted values with operators
   .pipe(
     // use the tap operator to intercept the emitted values and do something with it without mutating the value before passing it on (side effects can be performed with emitted value even though this example doesn't do that)
     tap((val) => console.log("A new value was emitted")),
     // use the skip operator to skip the first 4 emitted values
     skip(4),
-    // use the take operator to take 30 emitted values and then unsubscribe from the stream. Note that operating ordering matters. Since take() is used after skip(), take() will only start receiving values and starting its count after skipping the first 4 values.
+    // use the take operator to take 30 emitted values and then unsubscribe from the stream. Note that operator ordering matters. Since take() is used after skip(), take() will only start receiving values and starting its count after skipping the first 4 values.
     take(30),
     // map operator adds 100 to every emitted value
     map((val) => val + 100),
