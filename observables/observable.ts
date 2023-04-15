@@ -1,4 +1,3 @@
-import { map } from "../operators/map-operator";
 import {
   CleanUpFn,
   Observer,
@@ -41,7 +40,6 @@ export class Observable<T> {
       },
       completed: () => {
         if (!!this._unsubscribed) return;
-
         this._unsubscribed = true;
         sourceObserver.completed();
         this._cleanUpFn();

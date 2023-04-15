@@ -23,16 +23,3 @@ export type DiverterFn<T> = (emittedValue: T) => void;
 export type OperatorFn<T, R> = (
   sourceObservable: Observable<T>
 ) => Observable<R>;
-
-export type TransformationOperator<T, R> = (
-  transformationFn: TransformationFn<T, R>
-) => OperatorFn<T, R>;
-
-export type PredicateOperator<T> = (
-  predicateFn: PredicateFn<T>
-) => Observable<T>;
-
-export type Operator<T, R> =
-  | TransformationOperator<T, R>
-  | PredicateOperator<T>
-  | DiverterOperator<T>;
