@@ -1,49 +1,62 @@
 # Observables Library
 
-This is a library that mimics the basic functionality of the RxJS library created for learning purposes. It includes an Observable class for creating observables and 3 operators: tap, map, and filter. Observable instances can be subscribed and unsubscribed to. Obsrvables also have a `pipe()` method that can be used with the operators.
+This is a library that reimplements the basic functionality of observables and operators and was inspired by RxJS. It includes an Observable class for creating observables and a few commonly used operators. Observable instances can be subscribed and unsubscribed to. Obsrvables also have a `pipe()` method that can be used with the operators. The following operators are available and function similarly to the RxJS operators of the same name:
+
+- filter (https://rxjs.dev/api/index/function/filter)
+- map (https://rxjs.dev/api/operators/map)
+- tap (https://rxjs.dev/api/index/function/tap)
+- startWith (https://rxjs.dev/api/index/function/startWith)
+- take (https://rxjs.dev/api/index/function/take)
+- skip (https://rxjs.dev/api/index/function/skip)
 
 ```
-  // USAGE EXAMPLE
 
-  // Create a new observable with a producer function that emits a number starting from 0 that increments by 1 every 1s
-  const sub$ = new Observable<number>((observer) => {
-    let num = 0;
-    const interval = setInterval(() => {
-      observer.next(num);
-      num += 1;
-    }, 1000);
+// USAGE EXAMPLE
 
-    // producer function returns a clean up function that stops the number-generating stream
-    return () => {
-      clearInterval(interval);
-    };
-  })
-    .pipe(
-      // use the tap operator to intercept the emitted values and do something with it without mutating the value before passing it on
-      tap((v) => console.log("A new value was emitted")),
-      // map operator adds 100 to every emitted value
-      map((v) => v + 100),
-      // filter prevent any odd number from being passed on
-      filter((v) => v % 2 === 0)
+// Create a new observable with a producer function that emits a number starting from 0 that increments by 1 every 1s
+const sub$ = new Observable<number>((observer) => {
+  let num = 0;
+  const interval = setInterval(() => {
+    observer.next(num);
+    num += 1;
+  }, 1000);
+
+  // producer function returns a clean up function that stops the number-generating stream
+  return () => {
+    clearInterval(interval);
+  };
+})
+  // use the pipe() method of the observable to create a pipeline for manipulating emitted values with operators
+  .pipe(
+    // use the tap operator to intercept the emitted values and do something with it without mutating the value before passing it on (side effects can be performed with emitted value even though this example doesn't do that)
+    tap((val) => console.log("A new value was emitted")),
+    // use the skip operator to skip the first 4 emitted values
+    skip(4),
+    // use the take operator to take 30 emitted values and then unsubscribe from the stream. Note that operator ordering matters. Since take() is used after skip(), take() will only start receiving values and starting its count after skipping the first 4 values.
+    take(30),
+    // map operator adds 100 to every emitted value
+    map((val) => val + 100),
+    // filter operator used to filter out any odd values
+    filter((val) => val % 2 === 0),
+    // the startWith operator is used to set the default value. Note that operator ordering in the pipeline matters to achieve the desired results. For example, if the startWith operator is not placed at the end of this pipeline, it will not work.
+    startWith(
+      "This is the default starting value. The regular data stream will follow now."
     )
-    .subscribe({
-      next: (num) => {
-        console.log(num);
-      },
-      error: (error) => {
-        console.error(error);
-      },
-      completed: () => {
-        console.log("Done");
-      },
-    });
+  )
+  .subscribe({
+    next: (val) => {
+      console.log(val);
+    },
+    error: (error) => {
+      console.error(error);
+    },
+    completed: () => {
+      console.log("Completed was called, the data stream has finished.");
+    },
+  });
 
-  // After 30s we unsubscribed from the observable's data stream by calling unsubscribe() which executes the clean up function
-  setTimeout(() => {
-    sub$.unsubscribe();
-  }, 30_000);
 ```
 
 ## Results:
 
-<img width="737" alt="image" src="https://user-images.githubusercontent.com/85326434/232184255-69c5e2c9-88d6-4ad7-83a5-2dae37e3acab.png">
+<img width="542" alt="image" src="https://user-images.githubusercontent.com/85326434/232246749-27418d2e-96d8-4306-b3b7-0edc4990f295.png">
