@@ -21,9 +21,10 @@ export function tap<T>(diverterFn: DiverterFn<T>): OperatorFn<T, T> {
             // clone the source value to avoid mutating it
             clonedSourceValue = structuredClone(sourceValue);
           } catch (err) {
-            console.error(
+            nextObserver.error(
               `tap operator could not clone received value: ${err}`
             );
+            return;
           }
 
           // use cloned value as the function argument that was originally passed into the tap() operator
